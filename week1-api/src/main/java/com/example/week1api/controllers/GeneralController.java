@@ -1,9 +1,12 @@
 package com.example.week1api.controllers;
 
+import com.example.week1api.models.Order;
 import com.example.week1api.models.Product;
 import com.example.week1api.models.User;
+import com.example.week1api.services.OrderService;
 import com.example.week1api.services.ProductService;
 import com.example.week1api.services.UserService;
+import org.aspectj.weaver.ast.Or;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,6 +23,9 @@ public class GeneralController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private OrderService orderService;
+
     RestTemplate restTemplate = new RestTemplate();
 
 
@@ -28,15 +34,30 @@ public class GeneralController {
         return productService.getAllProduct();
     }
     @GetMapping("/products/{id}")
-    Product getUserById(@PathVariable long id){
-        User user = restTemplate.getForObject("http://localhost:8080/users/"+id, User.class);
-        return productService.findProductById(id);
+    Product getProductById(@PathVariable long id){
+//        User user = restTemplate.getForObject("http://localhost:8080/products/"+id, User.class);
+        Product product = productService.findProductById(id);
+        return product;
     }
-
 
     @GetMapping("/users")
     List<User> getAllUser(){
         return userService.getAllUser();
     }
+
+    @GetMapping("/orders")
+    List<Order> getAllOrder(){
+        List<Order> orders = orderService.findAllOrder();
+        return orders;
+    }
+
+    @GetMapping("/orders/{id}")
+    Order getOrderById(@PathVariable long id){
+//        User user = restTemplate.getForObject("http://localhost:8080/products/"+id, User.class);
+        Order order = orderService.findById(id);
+        return order;
+    }
+
+
 }
 
